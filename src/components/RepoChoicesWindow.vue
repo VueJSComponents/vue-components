@@ -24,11 +24,19 @@
           />
       </v-tab-item>            
       <v-tab-item key="recent">
-          <SearchResults :results="recentResults"/>
+          <SearchResults 
+            :results="recentResults"
+            @repoSelected="selectedRepoChanged" 
+            :selectedRepo="selectedRepo"
+          />
 
       </v-tab-item>
       <v-tab-item key="favs">
-          <SearchResults :results="favResults" :selectedRepo="selectedRepo"/>
+          <SearchResults 
+            :results="favResults" 
+            @repoSelected="selectedRepoChanged" 
+            :selectedRepo="selectedRepo"
+          />
       </v-tab-item>
     </v-tabs>
   </div>
@@ -45,15 +53,10 @@ import SearchWindow from './SearchWindow.vue';
     SearchWindow
   }
 })
-export default class SearchResultTabs extends Vue {
+export default class RepoChoicesWindow extends Vue {
   public active = '0';
   @Prop() public selectedRepo!: string;
 
-  selectedRepoChanged(repo: string) {
-    console.log(`SearchResultTabs got ${repo} repo changed to`);
-    
-    this.$emit('repoSelected', repo);
-  }
   public searchResults: ISearchItem[] = [
     {
       repo: 'vue-slider-component',
@@ -126,5 +129,9 @@ export default class SearchResultTabs extends Vue {
       }
     }
   ];
+
+  public selectedRepoChanged(repo: string) {
+    this.$emit('repoSelected', repo);
+  }
 }
 </script>

@@ -8,8 +8,9 @@
             avatar 
             @click="selectItem(item)" 
             ripple
+            :class="item.repo === selectedRepo ? 'active' : 'inactive'"
           >
-            <v-list-tile-avatar :class="item.repo === selectedRepo ? 'active' : 'inactive'">
+            <v-list-tile-avatar >
               <v-avatar
                 :size="avatarSize"
                 color="grey lighten-4"
@@ -55,7 +56,7 @@ export default class SearchResults extends Vue {
   @Prop() public results!: ISearchItem[];
   @Prop() public selectedRepo!: string;
 
-  selectItem(item: ISearchItem) {
+  public selectItem(item: ISearchItem) {
     this.$emit('repoSelected', item.repo);
   }
 }
@@ -68,5 +69,9 @@ export default class SearchResults extends Vue {
   padding: 0 6px;
   border-radius: 4px;
   font-size: 12px;
+}
+
+.active {
+  background-color: #FFF9C4;
 }
 </style>
