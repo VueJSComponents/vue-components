@@ -22,7 +22,19 @@
                   <span class="caption">npm version </span>
                 </span>
                 <span>
-                  test
+                  <span class="headline flexbox column flex-end">
+                  <span class="caption npm-score-title">npm score </span>
+                  <span class="display-1 flex-end flexbox">
+                    <v-tooltip right>
+                      <span slot="activator" class="npm-score">68.2</span>
+                      <span>
+                        quality: 55,<br/>
+                        popularity: 45,<br/>
+                        maintenance: 80
+                      </span>
+                    </v-tooltip>
+                  </span>
+                </span>
                 </span>
               </v-flex>
             </v-layout>
@@ -130,5 +142,20 @@ export default class ViewPackageMeta extends Vue {
 
 .repo-attributes span > .icon {
   margin-right: 5px;
+}
+
+.npm-score-title {
+  padding: 0;
+  margin-bottom: -8px;
+}
+
+.npm-score {
+  cursor: pointer;
+}
+
+.npm-score:hover {
+  font-weight: 700;
+  margin-right: -2px;
+  transition: all 0.5s;
 }
 </style>

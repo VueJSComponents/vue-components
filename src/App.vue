@@ -3,7 +3,7 @@
     <NavDrawer :drawer="drawer"/>
     <TopToolbar :title="title" @toggleDrawer="drawer = !drawer"/>
     <v-content>
-      <ContentWindow :selectedRepo="selectedRepo" @clearRepo="selectedRepo=''"/>
+      <ContentWindow :selectedRepo="selectedRepo" @changeRepo="selectedRepo = $event"/>
     </v-content>
   
     <v-footer :fixed="fixed" app  color="grey darken-3" dark>
@@ -14,37 +14,28 @@
   </v-app>
 </template>
 
-<script>
-import RepoChoicesWindow from './components/RepoChoicesWindow';
-import ContentWindow from './components/ContentWindow';
-import NavDrawer from './components/NavDrawer';
-import TopToolbar from './components/TopToolbar';
+<script lang="ts">
+import RepoChoicesWindow from './components/RepoChoicesWindow.vue';
+import ContentWindow from './components/ContentWindow.vue';
+import NavDrawer from './components/NavDrawer.vue';
+import TopToolbar from './components/TopToolbar.vue';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
-export default {
+@Component({
   name: 'App',
   components: {
     RepoChoicesWindow,
     ContentWindow,
     TopToolbar,
     NavDrawer
-  },
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'bubble_chart',
-          title: 'Inspire'
-        }
-      ],
-      miniVariant: false,
-      title: 'VueJS Components',
-      selectedRepo: ''
-    };
   }
-};
+})
+export default class App extends Vue {
+  public drawer: boolean = false;
+  public fixed: boolean = false;
+  public title: string = 'VueJS Components';
+  public selectedRepo: string = '';
+}
 </script>
  
 <style>
@@ -81,8 +72,12 @@ export default {
   flex-direction: column;
 }
 
-.flex-end {
+.flex-end,
+.row.flex-end {
   justify-content: flex-end;
+}
+.column.flex-end {
+  align-items: flex-end;
 }
 
 .flex.row {

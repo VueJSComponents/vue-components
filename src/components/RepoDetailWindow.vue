@@ -31,14 +31,6 @@
           </v-tab-item>
 
           <v-spacer></v-spacer>
-          <!-- <div right class="repo-name headline px-3">
-            <span>
-              {{ selectedRepo }}
-            </span>
-            <span>
-              <v-icon @click="selectedRepo=''">remove_circle</v-icon>
-            </span>
-          </div> -->
         </v-tabs>
 
       </div>
@@ -52,7 +44,7 @@
           >
         </v-tabs>
         <v-layout class="not-selected px-1 py-1 " fill-height>
-          <span>test</span>
+          <span>no repo selected</span>
         </v-layout>
       </div>
     </v-flex>
