@@ -1,11 +1,11 @@
 <template>
   <v-layout m0 p0 row wrap fill-height>
-    <v-flex xs12 sm12 md5 lg4 xl2 right-border fill-height>
+    <v-flex xs12 sm12 md5 lg2 xl2 right-border fill-height>
       <v-layout column py-0 px-0 fill-height>
         <RepoChoicesWindow @repoSelected="changeRepo($event)" :selectedRepo="selectedRepo"/>
       </v-layout>
     </v-flex>
-    <RepoDetailWindow @clearRepo="changeRepo('')" :selectedRepo="selectedRepo" />
+    <RepoDetailWindow :selectedRepo="$route.params.id" />
   </v-layout> 
 </template>
 

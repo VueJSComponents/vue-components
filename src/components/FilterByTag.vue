@@ -2,16 +2,15 @@
 <v-container fluid class="px-0 py-0">
     <v-layout row wrap>
       <v-flex xs12>
-        <v-select
+        <v-autocomplete
           :items="tagOptions"
           v-model="tagged"
-          label="Select"
+          label="Type of Component"
           item-text="name"
           item-value="name"
           multiple
           chips
           max-height="auto"
-          autocomplete
         >
           <template slot="selection" slot-scope="data">
             <v-chip
@@ -39,7 +38,7 @@
               </v-list-tile-content>
             </template>
           </template>
-        </v-select>
+        </v-autocomplete>
       </v-flex>
     </v-layout>
   </v-container>

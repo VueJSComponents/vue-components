@@ -20,6 +20,14 @@ import ContentWindow from './components/ContentWindow.vue';
 import NavDrawer from './components/NavDrawer.vue';
 import TopToolbar from './components/TopToolbar.vue';
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { DB } from 'abstracted-client';
+import { FireModel, Watch } from 'firemodel';
+import { VeuxWrapper } from '@/store/VuexWrapper';
+import { Package } from '@/models/Package';
+import { wait } from 'common-types';
+import { Mutation, namespace } from 'vuex-class';
+
+const Packages = namespace('packages');
 
 @Component({
   name: 'App',
@@ -35,6 +43,37 @@ export default class App extends Vue {
   public fixed: boolean = false;
   public title: string = 'VueJS Components';
   public selectedRepo: string = '';
+
+  @Packages.State public since: number;
+
+  public async mounted() {
+    const config = {
+      apiKey: 'AIzaSyCSgGc5m2SdkowLAHk2A2iV0IymNoTWB4Y',
+      authDomain: 'vue-components.firebaseapp.com',
+      databaseURL: 'https://vue-components.firebaseio.com',
+      projectId: 'vue-components',
+      storageBucket: 'vue-components.appspot.com',
+      messagingSenderId: '342051144863'
+    };
+    const db = await DB.connect(config);
+    console.log(db);
+    await wait(350);
+    FireModel.defaultDb = db;
+    if (this.$store.state.packages.all.length === 0) {
+      Watch.list(Package)
+        .since(16098442000)
+        .dispatch(VeuxWrapper(this.$store.dispatch))
+        .start();
+      this.$store.state.packages.since = new Date().getTime();
+    } else {
+      console.log(`packages loaded at initialization: `, this.$store.state.packages.all.length);
+      await wait(1000); // let other resources load
+      Watch.list(Package)
+        .since(this.$store.state.packages.since)
+        .dispatch(VeuxWrapper(this.$store.dispatch))
+        .start();
+    }
+  }
 }
 </script>
  
@@ -95,6 +134,14 @@ export default class App extends Vue {
 
 .informal-font {
   font-family: fantasy;
+}
+
+.backtick {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
 }
 </style>
  

@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs12 sm12 md7 lg8 xl10 my-0 px-0 fill-height>
+  <v-flex xs12 sm12 md7 lg10 xl10 my-0 px-0 fill-height>
       <div class="selected-repo" v-if="selectedRepo">
         <v-tabs
           v-model="active"

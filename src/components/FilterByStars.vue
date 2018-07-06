@@ -4,18 +4,18 @@
         Github Stars
     </v-flex>
     <v-flex xs12 sm6>
-        <v-btn-toggle xs12 v-model="stars">
-            <v-btn flat value="Number(1)">
+        <v-btn-toggle xs12 :input-value="stars === 0 ? undefined : stars.toString()" depressed=true>
+            <v-btn flat value="1" @click="changeFilter($event.target.value)">
                 1
             </v-btn>                
-            <v-btn flat value="Number(10)">
-                10
-            </v-btn>
-            <v-btn flat value="Number(25)">
+            <v-btn flat value="25" @click="changeFilter($event.target.value)">
                 25
             </v-btn>
-            <v-btn flat value="Number(100)">
-                100
+            <v-btn flat value="45" @click="changeFilter($event.target.value)">
+                45
+            </v-btn>
+            <v-btn flat value="65" @click="changeFilter($event.target.value)">
+                65
             </v-btn>
         </v-btn-toggle>
     </v-flex>
@@ -24,9 +24,21 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Getter, namespace, Mutation, State } from 'vuex-class';
+import { ISearchCriteria } from '@/store/SearchCriteria';
+const SearchCriteria = namespace('searchCriteria');
 
 @Component
 export default class FilterByStars extends Vue {
-  public stars: number = 1;
+  @SearchCriteria.State public stars!: number;
+  @SearchCriteria.Mutation public filterByStars!: (stars: number) => void;
+
+  changeFilter(stars: string) {
+    if (Number(stars) === this.stars) {
+      this.filterByStars(0);
+    } else {
+      this.filterByStars(Number(stars));
+    }
+  }
 }
 </script>

@@ -3,7 +3,9 @@
     <v-layout row>
       <v-flex >
         <v-text-field
-          v-model="searchText"
+          ref="filterNameInput"
+          :value="name"
+          @keyup="filterByName($event.target.value)"
           append-icon="search"
           type="text"
           name="input-10-1"
@@ -16,10 +18,15 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Getter, namespace, Mutation, State } from 'vuex-class';
+import { IRootState } from '@/store';
+const SearchCriteria = namespace('searchCriteria');
 
 @Component
 export default class FilterByText extends Vue {
   public rating: number = 0;
   @Prop() public searchText!: string;
+  @SearchCriteria.State public name!: string;
+  @SearchCriteria.Mutation public filterByName!: (name: string) => void;
 }
 </script>
