@@ -5,16 +5,16 @@
     </v-flex>
     <v-flex xs12>
         <v-btn-toggle xs12 :input-value="!rating ? undefined : rating.toString()"  >
-            <v-btn flat value="25" @click="changeFilter($event.target.value)">
+            <v-btn flat value="25" @click="changeFilter(25)">
                 25
             </v-btn>                
-            <v-btn flat value="40" @click="changeFilter($event.target.value)">
+            <v-btn flat value="40" @click="changeFilter(40)">
                 40
             </v-btn>
-            <v-btn flat value="60" @click="changeFilter($event.target.value)">
+            <v-btn flat value="60" @click="changeFilter(60)">
                 60
             </v-btn>
-            <v-btn flat value="70" @click="changeFilter($event.target.value)">
+            <v-btn flat value="70" @click="changeFilter(70)">
                 70
             </v-btn>
         </v-btn-toggle>

@@ -1,5 +1,5 @@
 <template>
-  <div class="distribution-chart ct-chart ct-major-sixth" v-resize="onResize"></div>
+  <div class="distribution-chart ct-chart ct-major-sixth"></div>
 </template>
 
 <script lang='ts'>
@@ -10,8 +10,9 @@ import { IDistributionElement } from '@/models';
 import differenceInDays from 'date-fns/difference_in_days';
 import { Package } from '@/models/Package';
 import { IDictionary } from 'common-types';
-import resize from 'vue-resize-directive';
+
 const Packages = namespace('packages');
+const Transient = namespace('transient');
 
 @Component
 export default class DistibutionChart extends Vue {
@@ -19,6 +20,7 @@ export default class DistibutionChart extends Vue {
   @Prop() public xAxis: string[];
   @Prop() public velocity: boolean;
   @Packages.Getter selectedPackage: Package;
+  @Transient.State public distributionWidth: number;
 
   public get aggregateSeries() {
     const distribution = this.selectedPackage
@@ -51,11 +53,12 @@ export default class DistibutionChart extends Vue {
   }
 
   public chart() {
-    console.log('drawing chart');
+    const width = this.distributionWidth - 40;
+    const aspectRatio = 3 / 5;
     const series = this.$props.velocity
       ? [this.aggregateSeries, this.velocitySeries]
       : [this.aggregateSeries];
-
+    this.$el.innerHTML = '';
     new Chartist.Line(
       this.$el,
       {
@@ -63,17 +66,24 @@ export default class DistibutionChart extends Vue {
         series
       },
       {
-        showArea: false
+        showArea: false,
+        width,
+        height: width * aspectRatio
       }
     );
   }
 
-  public mounted() {}
+  public get width() {
+    return this.$el.offsetWidth;
+  }
+
+  public mounted() {
+    this.$nextTick(() => {
+      this.chart();
+    });
+  }
 }
 </script>
-
-
-
 
 <style >
 .ct-series-b .ct-line {

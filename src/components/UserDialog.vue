@@ -5,7 +5,7 @@
       @input="HIDE_USER_PROFILE()"
       max-width="450"
     >
-      <v-card>
+      <v-card v-if="selectedUser">
         <v-card-title class="headline">
           {{selectedUser.name}} 
         </v-card-title>
@@ -74,6 +74,27 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <v-card v-else> 
+        <v-card-media
+          src="/img/404.png"
+          height="200px"
+        ></v-card-media>
+        <v-card-text>
+          Sorry, user profile information for the user <b>{{show}}</b> couldn't be found.
+        </v-card-text>
+                <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="red darken-1"
+            @click="HIDE_USER_PROFILE()"
+          >
+            <v-icon color="red lighten-3">
+              highlight_off
+            </v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>  
     </v-dialog>
 </v-layout>
 </template>

@@ -1,7 +1,7 @@
 <template>
 <div class="package-meta" v-if="selectedPackage">
-  <v-flex>
-      <v-card flex flex-column>
+  <v-flex class="d-flex space-around">
+      <v-card class="d-flex ">
         <v-card-media
           class="white--text"
           height="230px"
@@ -59,8 +59,9 @@
           </span>
         </v-card-text>
         <v-card-title>
-          <div>
-            <h3>META Information</h3> 
+          <h3>Overview</h3> 
+        </v-card-title>
+        <v-card-text>
             <p>
               The <i>{{ cleanedRepoName }}</i>&nbsp; repository has been in existence since <b>{{createdAt}}</b> with the latest commit on <b>{{lastUpdated}}</b>. It describes itself as: 
             </p>
@@ -69,6 +70,14 @@
               {{(selectedPackage || {}).description}}
               <v-icon>format_quote</v-icon>
             </p>
+        </v-card-text>
+
+        <v-card-title>
+          <h3>Tags</h3>
+        </v-card-title>
+
+        <v-card-text>
+            
             <p class="py-1">
               This repository also has tagged keywords in the <span class="backtick">package.json</span> file which maps to the following tags:
             </p>
@@ -77,10 +86,14 @@
               <v-chip>vue /&nbsp;<strong>2.x</strong></v-chip>
               <v-chip>scale /&nbsp;<strong>atomic</strong></v-chip>
             </div>
-          </div>
+        </v-card-text>
+
+        <v-card-title>
+          <h3>Other Meta</h3>
         </v-card-title>
+
         <v-card-text class="pt-3 xs12 flexbox row horizontal-cards">
-          <v-card class="xs12 sidebar-info">
+          <v-card class="xs12 sidebar-info" ref="distributions" v-resize="onResize">
             <v-card-title class="brown lighten-4">Distributions</v-card-title>
             <v-card-text>
               <Distributions />
@@ -180,9 +193,11 @@ import { IDictionary, fk } from 'common-types';
 import { hashToArray } from 'typed-conversions';
 import format from 'date-fns/format';
 import { User } from '@/models/User';
+import resize from 'vue-resize-directive';
 const Packages = namespace('packages');
 const Users = namespace('users');
 const SnackBar = namespace('snackbar');
+const Transient = namespace('transient');
 
 @Component({
   components: { Distributions, UserDialog }
@@ -199,6 +214,27 @@ export default class ViewPackageMeta extends Vue {
   @Users.Mutation public SHOW_USER_PROFILE: (id: fk) => void;
   @Users.Mutation public HIDE_USER_PROFILE: () => void;
   @Users.State public show: fk;
+  @Transient.State public distributionWidth: number;
+
+  mounted() {
+    this.$nextTick(() => {
+      this.setDistributionWidth();
+    });
+  }
+
+  onResize() {
+    this.$nextTick(() => {
+      this.setDistributionWidth();
+    });
+  }
+
+  public setDistributionWidth() {
+    const width = (this.$refs.distributions as Vue).$el.offsetWidth;
+
+    if (this.distributionWidth !== width) {
+      this.$store.commit('transient/DISTRIBUTION_WIDTH', width);
+    }
+  }
 
   public get createdAt() {
     return format(this.selectedPackage.createdAt, 'D MMM YYYY');
@@ -263,15 +299,17 @@ export default class ViewPackageMeta extends Vue {
 }
 </script>
 
-<style>
-</style>
-
 
 <style scoped>
 .v-card {
   margin: 25px;
   max-width: 1024px;
   flex-grow: 0;
+  flex-direction: column;
+}
+
+.space-around {
+  justify-content: space-around;
 }
 
 .v-card.sidebar-info {

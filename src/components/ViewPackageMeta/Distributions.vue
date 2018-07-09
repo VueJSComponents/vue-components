@@ -56,7 +56,7 @@ export default class Distributions extends Vue {
       {
         name: 'Github Issues',
         description: 'Github issues aging report.',
-        property: 'issues',
+        property: 'issues.distribution',
         xAxis: ['1m', '3m', '6m', '12m'],
         velocity: false,
         data: this.selectedPackage.issues

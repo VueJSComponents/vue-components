@@ -5,16 +5,16 @@
     </v-flex>
     <v-flex xs12 sm6>
         <v-btn-toggle xs12 :input-value="!stars ? undefined : stars.toString()" depressed=true>
-            <v-btn flat value="1" @click="changeFilter($event.target.value)">
+            <v-btn flat value="1" @click="changeFilter(1)">
                 1
             </v-btn>                
-            <v-btn flat value="25" @click="changeFilter($event.target.value)">
+            <v-btn flat value="25" @click="changeFilter(25)">
                 25
             </v-btn>
-            <v-btn flat value="45" @click="changeFilter($event.target.value)">
+            <v-btn flat value="45" @click="changeFilter(45)">
                 45
             </v-btn>
-            <v-btn flat value="65" @click="changeFilter($event.target.value)">
+            <v-btn flat value="65" @click="changeFilter(65)">
                 65
             </v-btn>
         </v-btn-toggle>
@@ -34,8 +34,6 @@ export default class FilterByStars extends Vue {
   @SearchCriteria.Mutation public FILTER_BY_STARS!: (stars: number) => void;
 
   changeFilter(stars: string) {
-    console.log(stars);
-
     if (Number(stars) === this.stars) {
       this.FILTER_BY_STARS(0);
     } else {
