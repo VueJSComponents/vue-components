@@ -6,9 +6,9 @@
       <ContentWindow :selectedRepo="selectedRepo" @changeRepo="selectedRepo = $event"/>
     </v-content>
   
-    <v-footer :fixed="fixed" app  color="grey darken-3" dark>
-      <div class="text-lg-center">
-        <span class="px-3">&copy; 2018 Ken Snyder</span>
+    <v-footer :fixed="fixed" app  color="grey darken-3" dark class="footer-bar">
+      <div class="flex text-lg-center ">
+        <span class="footer-text">&copy; 2018 Ken Snyder</span>
       </div>
     </v-footer>
   </v-app>
@@ -21,9 +21,10 @@ import NavDrawer from './components/NavDrawer.vue';
 import TopToolbar from './components/TopToolbar.vue';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { DB } from 'abstracted-client';
-import { FireModel, Watch } from 'firemodel';
+import { FireModel, Watch, List, FMEvents } from 'firemodel';
 import { VeuxWrapper } from '@/store/VuexWrapper';
 import { Package } from '@/models/Package';
+import { User } from '@/models/User';
 import { wait } from 'common-types';
 import { Mutation, namespace } from 'vuex-class';
 
@@ -59,23 +60,47 @@ export default class App extends Vue {
     console.log(db);
     await wait(350);
     FireModel.defaultDb = db;
+    FireModel.dispatch = VeuxWrapper(this.$store.dispatch);
+    // Packages
     if (this.$store.state.packages.all.length === 0) {
+      const packages = await List.all(Package);
+      console.log(`got list of all packages [ ${packages.length} ]`);
+
+      // this.$store.commit('packages/UPDATE_SINCE');
       Watch.list(Package)
-        .since(16098442000)
-        .dispatch(VeuxWrapper(this.$store.dispatch))
+        .since(this.$store.state.packages.since)
         .start();
-      this.$store.state.packages.since = new Date().getTime();
     } else {
       console.log(`packages loaded at initialization: `, this.$store.state.packages.all.length);
       await wait(1000); // let other resources load
       Watch.list(Package)
         .since(this.$store.state.packages.since)
-        .dispatch(VeuxWrapper(this.$store.dispatch))
         .start();
+    }
+    // Users
+    if (this.$store.state.users.since) {
+      console.log(`users loaded at initialization:`, this.$store.state.users.all.length);
+      Watch.list(User)
+        .since(this.$store.state.users.since)
+        .start();
+    } else {
+      const users = await List.all(User);
+      console.log(`loaded all user records [ ${users.length} ]`);
     }
   }
 }
 </script>
+<style scoped>
+.footer-bar {
+  height: 12px !important;
+}
+.footer-text {
+  font-size: 12px;
+  color: #f9f5fd;
+  font-weight: 400;
+}
+</style>
+
  
 <style>
 .flexbox {

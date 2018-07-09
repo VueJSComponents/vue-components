@@ -80,13 +80,13 @@
           </div>
         </v-card-title>
         <v-card-text class="pt-3 xs12 flexbox row horizontal-cards">
-          <v-card class="xs3">
+          <v-card class="xs12 sidebar-info">
             <v-card-title class="brown lighten-4">Distributions</v-card-title>
             <v-card-text>
-              <VelocityMeasurements/>
+              <Distributions />
             </v-card-text>
           </v-card>
-          <v-card class="xs3 dependencies">
+          <v-card class="xs12 dependencies sidebar-info">
             <v-card-title class="brown lighten-4">Dependencies</v-card-title>
             <v-card-text class="d-inline">
                 <v-data-table
@@ -95,13 +95,13 @@
                   hide-actions
                 >
                   <template slot="items" slot-scope="props">
-                    <td>{{ props.item.dependency.replace('%2E', '.') }}</td>
+                    <td>{{ props.item.dependency.replace('%2E', '.').replace('!!!', '/') }}</td>
                     <td class="text-xs-right">{{ props.item.version }}</td>
                   </template>
                 </v-data-table>
             </v-card-text>
           </v-card>
-          <v-card class="xs3 contributors">
+          <v-card class="sidebar-info contributors xs12">
             <v-card-title class="brown lighten-4">Contributors</v-card-title>
             <v-card-text>
                 <v-data-table
@@ -109,24 +109,38 @@
                   :items="contributors"
                   hide-actions
                 >
-                  <template slot="items" slot-scope="props">
+                  <template slot="items" slot-scope="props" >
+                    <tr @click.stop="SHOW_USER_PROFILE(props.item.id)">
                     <td class="contributor-avatar">
                       <v-avatar size=25>
-                        <v-gravatar :email="props.item.avatar" default-img="mm" />
+                        <img 
+                          v-if="lookupUser(props.item.id).avatar_url" 
+                          :src="lookupUser(props.item.id).avatar_url">
+                        <v-gravatar v-else :email="lookupUser(props.item.id).email" default-img="mm" />
                       </v-avatar>
                     </td>
-                    <td class="text-xs-left">
+                    <td class="text-xs-left" >
                       &nbsp;&nbsp;
                       {{ props.item.username }}
                     </td>
                     <td class="text-xs-right">{{ props.item.commitsCount }}</td>
+
+                    </tr>
                   </template>
                 </v-data-table>
             </v-card-text>
           </v-card>
         </v-card-text>
         <v-card-actions>
-          <v-btn flat color="green" @click="openNewTab(githubRepositoryUrl)">
+          <v-btn 
+            v-if="selectedPackage.homePage"
+            flat 
+            color="green" 
+            @click="openNewTab(selectedPackage.homePage)"
+          >
+            <v-icon color="green lighten-3">link</v-icon> Home Page
+          </v-btn>
+          <v-btn flat color="green" @click="openNewTab('https://github.com/' + selectedPackage.gitRepositoryOrg + '/' + selectedPackage.gitRepositoryName)">
             <v-icon color="green lighten-3">link</v-icon> Github
           </v-btn>
           <v-btn flat color="green" @click="openNewTab(selectedPackage.links.npm)">
@@ -135,6 +149,7 @@
         </v-card-actions>
       </v-card>
     </v-flex>
+    <user-dialog :id="show"></user-dialog>
   <!-- <v-snackbar
         :value="snackConfig.display"
         :color="snackConfig.color"
@@ -157,16 +172,20 @@
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { State, Getter, Mutation, Action, namespace } from 'vuex-class';
-import VelocityMeasurements from './ViewPackageMeta/VelocityMeasurements.vue';
-import { Package } from '@/models/Package';
+import Distributions from './ViewPackageMeta/Distributions.vue';
+import UserDialog from './UserDialog.vue';
+import { Package, IContributors } from '@/models/Package';
 import { ISnackbar } from '@/store/snackbar';
-import { IDictionary } from 'common-types';
+import { IDictionary, fk } from 'common-types';
+import { hashToArray } from 'typed-conversions';
 import format from 'date-fns/format';
+import { User } from '@/models/User';
 const Packages = namespace('packages');
+const Users = namespace('users');
 const SnackBar = namespace('snackbar');
 
 @Component({
-  components: { VelocityMeasurements }
+  components: { Distributions, UserDialog }
 })
 export default class ViewPackageMeta extends Vue {
   @Prop() public selectedRepo!: string;
@@ -176,6 +195,10 @@ export default class ViewPackageMeta extends Vue {
   @SnackBar.Mutation public closeSnackbar!: () => void;
   @SnackBar.Mutation public displaySnack!: (config: ISnackbar) => void;
   @SnackBar.State('.') public snackConfig: ISnackbar;
+  @Users.Getter public lookupUser: (id: fk) => User;
+  @Users.Mutation public SHOW_USER_PROFILE: (id: fk) => void;
+  @Users.Mutation public HIDE_USER_PROFILE: () => void;
+  @Users.State public show: fk;
 
   public get createdAt() {
     return format(this.selectedPackage.createdAt, 'D MMM YYYY');
@@ -199,7 +222,7 @@ export default class ViewPackageMeta extends Vue {
   }
 
   public get cleanedRepoName() {
-    return this.selectedRepo.replace('!!!', '/');
+    return this.selectedRepo.replace('!!!', '/').replace('%2E', '.');
   }
 
   public get dependencies(): IDictionary<{ dependency: string; version: string }>[] {
@@ -210,20 +233,14 @@ export default class ViewPackageMeta extends Vue {
     }, []);
   }
 
-  public get contributors(): IDictionary<{ username: string; commits: string }>[] {
-    const deps = this.selectedPackage.contributors || {};
-    return Object.keys(deps)
-      .reduce((arr: any[], key: string): any[] => {
-        arr = arr.concat({ username: key, commitsCount: deps[key].commitsCount });
-        return arr;
-      }, [])
-      .sort((a, b) => (a.commitsCount > b.commitsCount ? -1 : 1));
+  public get contributors(): IContributors[] {
+    const deps = hashToArray(this.selectedPackage.contributors || {});
+    return deps.sort((a, b) => (a.commitsCount > b.commitsCount ? -1 : 1));
   }
 
   public openNewTab(url: string) {
-    console.log('called', url);
     if (url) {
-      (this as any).window.open(url, '_external');
+      window.open(url, '_external');
     } else {
       const snack = {
         color: '',
@@ -257,8 +274,26 @@ export default class ViewPackageMeta extends Vue {
   flex-grow: 0;
 }
 
+.v-card.sidebar-info {
+  margin: 12px;
+}
+
+.v-card.sidebar-info:first-child {
+  margin-left: 2px;
+}
+
+.v-card.sidebar-info:last-child {
+  margin-right: 2px;
+}
+
 .v-card.contributors {
   max-width: 30%;
+  cursor: pointer;
+}
+
+.v-card.dependencies {
+  max-width: 28%;
+  cursor: default;
 }
 
 table.v-table tbody td,

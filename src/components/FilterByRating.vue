@@ -4,18 +4,18 @@
         NPM Rating
     </v-flex>
     <v-flex xs12>
-        <v-btn-toggle xs12 :input-value="rating === 0 ? undefined : rating.toString()"  >
-            <v-btn flat value="35" @click="changeFilter($event.target.value)">
-                35
+        <v-btn-toggle xs12 :input-value="!rating ? undefined : rating.toString()"  >
+            <v-btn flat value="25" @click="changeFilter($event.target.value)">
+                25
             </v-btn>                
-            <v-btn flat value="50" @click="changeFilter($event.target.value)">
-                50
+            <v-btn flat value="40" @click="changeFilter($event.target.value)">
+                40
             </v-btn>
-            <v-btn flat value="75" @click="changeFilter($event.target.value)">
-                75
+            <v-btn flat value="60" @click="changeFilter($event.target.value)">
+                60
             </v-btn>
-            <v-btn flat value="90" @click="changeFilter($event.target.value)">
-                90
+            <v-btn flat value="70" @click="changeFilter($event.target.value)">
+                70
             </v-btn>
         </v-btn-toggle>
     </v-flex>

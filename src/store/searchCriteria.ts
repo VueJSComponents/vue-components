@@ -20,7 +20,7 @@ const mutations: MutationTree<ISearchCriteria> = {
   filterByName(state, name: string) {
     state.name = name;
   },
-  filterByStars(state, stars: number) {
+  FILTER_BY_STARS(state, stars: number) {
     state.stars = stars;
   },
   FILTER_BY_RATING(state, rating: number) {

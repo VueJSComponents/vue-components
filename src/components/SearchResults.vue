@@ -27,7 +27,7 @@
             <v-list-tile-content>
                 <v-list-tile-title>
                     <div class="left">
-                      {{ item.id.replace('!!!', '/') }}
+                      {{ item.id.replace('!!!', '/').replace('%2E', '.') }}
                     </div>
                     <div class="right version-tag">
                       {{ item.version }}

@@ -62,6 +62,14 @@ const getters: GetterTree<IPackages, IRootState> = {
 const mutations: MutationTree<IPackages> = {
   selectPackage(state, id: fk) {
     state.selected = id;
+  },
+  UPDATE_SINCE(state, timestamp?: number | string) {
+    if (!timestamp) {
+      timestamp = new Date().getTime();
+    } else if (typeof timestamp === 'string') {
+      timestamp = new Date(timestamp).getTime();
+    }
+    state.since = timestamp;
   }
 };
 

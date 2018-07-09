@@ -4,7 +4,7 @@
         Github Stars
     </v-flex>
     <v-flex xs12 sm6>
-        <v-btn-toggle xs12 :input-value="stars === 0 ? undefined : stars.toString()" depressed=true>
+        <v-btn-toggle xs12 :input-value="!stars ? undefined : stars.toString()" depressed=true>
             <v-btn flat value="1" @click="changeFilter($event.target.value)">
                 1
             </v-btn>                
@@ -31,13 +31,15 @@ const SearchCriteria = namespace('searchCriteria');
 @Component
 export default class FilterByStars extends Vue {
   @SearchCriteria.State public stars!: number;
-  @SearchCriteria.Mutation public filterByStars!: (stars: number) => void;
+  @SearchCriteria.Mutation public FILTER_BY_STARS!: (stars: number) => void;
 
   changeFilter(stars: string) {
+    console.log(stars);
+
     if (Number(stars) === this.stars) {
-      this.filterByStars(0);
+      this.FILTER_BY_STARS(0);
     } else {
-      this.filterByStars(Number(stars));
+      this.FILTER_BY_STARS(Number(stars));
     }
   }
 }

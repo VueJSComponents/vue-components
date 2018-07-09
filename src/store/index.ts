@@ -9,7 +9,11 @@ import VuexPersistence from 'vuex-persist';
 
 const localStorage = new VuexPersistence<IRootState, Payload>({
   storage: window.localStorage,
-  reducer: state => ({ packages: state.packages, users: state.users })
+  reducer: state => ({
+    packages: state.packages,
+    users: state.users,
+    searchCriteria: state.searchCriteria
+  })
 });
 
 Vue.use(Vuex);
