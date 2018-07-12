@@ -1,17 +1,20 @@
 <template>
-  <v-expansion-panel popout>
-    <v-expansion-panel-content v-for="(item) in measurements" :key="item.name">
-      <div slot="header">{{item.name}}</div>
-      <v-card class="chart-area">
-        <v-card-text>
-          <distribution-chart :type="item.property" :xAxis="item.xAxis" :velocity="item.velocity" />
-          <p>
-            {{item.description}}
-          </p>
-        </v-card-text>
-      </v-card>
-    </v-expansion-panel-content>
-  </v-expansion-panel>
+<v-card class="xs12 sidebar-info" ref="distributions" v-resize="onResize">
+  <v-card-title class="brown lighten-4">Distributions</v-card-title>
+  <v-card-text>             
+    <v-expansion-panel popout>
+      <v-expansion-panel-content v-for="(item) in measurements" :key="item.name">
+        <div slot="header">{{item.name}}</div>
+        <v-card class="chart-area">
+            <distribution-chart :type="item.property" :xAxis="item.xAxis" :velocity="item.velocity" />
+            <p>
+              {{item.description}}
+            </p>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-card-text>
+</v-card>
 </template>
 
 <script lang='ts'>
@@ -22,14 +25,17 @@ import { IDistributionElement } from '@/models';
 import DistributionChart from '@/components/ViewPackageMeta/DistributionChart.vue';
 import differenceInDays from 'date-fns/difference_in_days';
 import { IDictionary } from 'common-types';
+// import resize from 'vue-resize-directive';
 
 const Packages = namespace('packages');
+const Transient = namespace('transient');
 
 @Component({
   components: { DistributionChart }
 })
 export default class Distributions extends Vue {
   @Packages.Getter public selectedPackage: Package;
+  @Transient.State public distributionWidth: number;
 
   public get npmDownloads() {
     return this.selectedPackage.npmDownloads || [];
@@ -63,12 +69,37 @@ export default class Distributions extends Vue {
       }
     ];
   }
+
+  public mounted() {
+    this.setDistributionWidth();
+  }
+
+  public onResize() {
+    this.setDistributionWidth();
+  }
+
+  public setDistributionWidth() {
+    const width = (this.$refs.distributions as Vue).$el.offsetWidth;
+
+    if (this.distributionWidth !== width) {
+      this.$store.commit('transient/DISTRIBUTION_WIDTH', width);
+    }
+  }
+
   /**
    * shallow clone of array or object
    */
-  public clone(thingy: Object) {
+  public clone(thingy: IDictionary) {
     return Array.isArray(thingy) ? thingy.slice(0) : Object.assign({}, thingy);
   }
 }
 </script>
 
+<style scoped>
+.chart-area {
+  padding-left: 0;
+}
+.chart-area svg {
+  padding-bottom: 0.5rem;
+}
+</style>

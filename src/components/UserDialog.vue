@@ -102,7 +102,7 @@
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { State, Getter, Mutation, Action, namespace } from 'vuex-class';
-import { fk } from 'firemodel';
+import { fk } from 'common-types';
 import { User } from '@/models/User';
 const Users = namespace('users');
 
@@ -118,7 +118,6 @@ export default class UserDialog extends Vue {
   }
 
   public try() {
-    console.log('dismissed');
     this.HIDE_USER_PROFILE();
   }
 

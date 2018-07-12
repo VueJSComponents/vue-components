@@ -33,7 +33,7 @@ export default class FilterByStars extends Vue {
   @SearchCriteria.State public stars!: number;
   @SearchCriteria.Mutation public FILTER_BY_STARS!: (stars: number) => void;
 
-  changeFilter(stars: string) {
+  public changeFilter(stars: string) {
     if (Number(stars) === this.stars) {
       this.FILTER_BY_STARS(0);
     } else {

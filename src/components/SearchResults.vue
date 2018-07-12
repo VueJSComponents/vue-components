@@ -45,6 +45,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { namespace } from 'vuex-class';
 import { Package } from '@/models/Package';
+import { ComponentTab } from '@/store/transient';
 
 export interface ISearchItem {
   avatar?: string;
@@ -58,6 +59,7 @@ export interface ISearchItem {
   };
 }
 const Packages = namespace('packages');
+const Transient = namespace('transient');
 
 @Component
 export default class SearchResults extends Vue {
@@ -65,12 +67,13 @@ export default class SearchResults extends Vue {
   @Prop() public results!: ISearchItem[];
   @Prop() public selectedRepo!: string;
   @Packages.Getter public filteredPackages!: Package[];
+  @Transient.State public componentTab: ComponentTab;
 
   public selectItem(item: Package) {
     if (this.$route.params.id === item.id) {
       this.$router.push({ path: `/component` });
     } else {
-      this.$router.push({ path: `/component/${item.id}` });
+      this.$router.push({ path: `/component/${item.id}/${this.componentTab}` });
     }
   }
 

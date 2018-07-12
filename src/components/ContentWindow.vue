@@ -22,10 +22,12 @@ import RepoDetailWindow from './RepoDetailWindow.vue';
   }
 })
 export default class ContentWindow extends Vue {
-  @Prop() public selectedRepo!: string;
-
   public changeRepo(val: string) {
     this.$emit('changeRepo', val);
+  }
+
+  public beforeRouteUpdate(to: any, from: any, next: any) {
+    console.log(to, from, next);
   }
 }
 </script>

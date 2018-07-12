@@ -1,0 +1,18 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": false,
+    "packages": {
+      ".indexOn": [
+        "lastUpdated",
+        "createdAt"
+      ]
+    },
+    "users": {
+      ".indexOn": [
+        "lastUpdated",
+        "createdAt"
+      ]
+    }
+  }
+}

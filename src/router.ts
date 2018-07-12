@@ -20,7 +20,7 @@ export default new Router({
       component: About
     },
     {
-      path: '/component/:id',
+      path: '/component/:id/:tab',
       component: ContentWindow
     },
     {

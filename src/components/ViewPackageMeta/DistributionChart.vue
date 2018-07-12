@@ -19,7 +19,7 @@ export default class DistibutionChart extends Vue {
   @Prop() public type: keyof typeof Package;
   @Prop() public xAxis: string[];
   @Prop() public velocity: boolean;
-  @Packages.Getter selectedPackage: Package;
+  @Packages.Getter public selectedPackage: Package;
   @Transient.State public distributionWidth: number;
 
   public get aggregateSeries() {
@@ -47,13 +47,14 @@ export default class DistibutionChart extends Vue {
 
   public onResize() {
     const width = this.$el.parentElement.offsetWidth;
-    if (width > 0) {
+    if (width > 60) {
       this.chart();
     }
   }
 
   public chart() {
-    const width = this.distributionWidth - 40;
+    // TODO: this is a workaround until I can figure out why the SVG is not responsive
+    const width = this.distributionWidth > 60 ? this.distributionWidth - 60 : 200;
     const aspectRatio = 3 / 5;
     const series = this.$props.velocity
       ? [this.aggregateSeries, this.velocitySeries]
@@ -86,6 +87,11 @@ export default class DistibutionChart extends Vue {
 </script>
 
 <style >
+.chart-area {
+  margin-left: 0;
+  padding-left: 0;
+  padding-left: -16px;
+}
 .ct-series-b .ct-line {
   stroke: grey;
   stroke-dasharray: 6px 8px;

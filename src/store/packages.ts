@@ -26,16 +26,15 @@ const state: IPackages = {
 
 const getters: GetterTree<IPackages, IRootState> = {
   // tslint:disable:no-shadowed-variable
-  selected(state): string {
-    const route = store.state.route;
-    return route.path ? route.path.split('/').pop() : '';
+  selected(state, _, rootState): string {
+    return rootState.route.path.indexOf('component') !== -1 ? rootState.route.params.id : '';
   },
-  filteredPackages(pkgState): Package[] {
+  filteredPackages(state): Package[] {
     const selectOn = store.state.searchCriteria;
-    const all = pkgState.all;
-    const selected = pkgState.selected;
+    const all = state.all;
+    const selected = state.selected;
     let filtered = selectOn.name
-      ? all.filter(i => i.id.indexOf(selectOn.name) !== -1 || pkgState.selected === i.id)
+      ? all.filter(i => i.id.indexOf(selectOn.name) !== -1 || state.selected === i.id)
       : all;
     filtered =
       selectOn.rating !== undefined

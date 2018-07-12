@@ -19,10 +19,10 @@ const state: ISnackbar = {
 
 const mutations: MutationTree<ISnackbar> = {
   // tslint:disable:no-shadowed-variable
-  closeSnackbar(state) {
+  CLOSE_SNACKBAR(state) {
     state.display = false;
   },
-  displaySnack(state, config: Omit<ISnackbar, 'display'>) {
+  DISPLAY_SNACK(state, config: Omit<ISnackbar, 'display'>) {
     state = { display: state.display, ...config };
   }
 };

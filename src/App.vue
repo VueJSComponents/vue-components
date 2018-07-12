@@ -107,6 +107,10 @@ export default class App extends Vue {
   display: flex;
 }
 
+.space-around {
+  justify-content: space-around;
+}
+
 .flexbox > span,
 .flexbox > div {
   display: flex;
@@ -159,6 +163,10 @@ export default class App extends Vue {
 
 .informal-font {
   font-family: fantasy;
+}
+
+.light {
+  font-weight: 200;
 }
 
 .backtick {

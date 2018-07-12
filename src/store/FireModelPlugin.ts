@@ -1,9 +1,12 @@
+// tslint:disable:no-console
 import { Store, ActionTree, MutationTree, Module, mapActions } from 'vuex';
 import { IRootState } from '@/store';
 import { FMEvents, IFMRecordEvent, IFMRecordListEvent } from 'firemodel';
 import { set } from 'lodash';
 import { Package } from '@/models/Package';
 import { IDictionary } from '../../../common-types/dist';
+
+
 
 const actions: ActionTree<IRootState, IRootState> = {
   [FMEvents.RECORD_ADDED]({ commit, rootState }, payload: IFMRecordEvent) {
@@ -26,7 +29,6 @@ const mutations: MutationTree<IRootState> = {
   },
   [FMEvents.SINCE_UPDATED](state, payload: IDictionary) {
     console.log('since updated running', payload.localPath);
-    
     set(payload.rootState, payload.localPath.replace('all', 'since'), new Date().getTime());
   },
   [FMEvents.RECORD_LIST](state, payload: IFMRecordListEvent & { rootState: IRootState }) {
@@ -35,8 +37,6 @@ const mutations: MutationTree<IRootState> = {
       prev[curr.id] = idx;
       return prev;
     }, {});
-    console.log("mapping:", mapping);
-    
     set(payload.rootState, payload.localPath.replace('all', 'byId'), mapping);
   }
 };

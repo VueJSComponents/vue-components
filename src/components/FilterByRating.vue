@@ -34,7 +34,7 @@ export default class FilterByRating extends Vue {
   @SearchCriteria.State public rating!: number;
   @SearchCriteria.Mutation public FILTER_BY_RATING!: (stars: number) => void;
 
-  changeFilter(rating: string) {
+  public changeFilter(rating: string) {
     if (Number(rating) === this.rating) {
       this.FILTER_BY_RATING(0);
     } else {
