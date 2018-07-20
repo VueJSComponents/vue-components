@@ -99,7 +99,4 @@ export class Package extends Model {
   @property public forksCount!: number;
 
   @property public isFork?: boolean;
-
-  // TODO: make this a compressed format
-  @property public readme?: string;
 }

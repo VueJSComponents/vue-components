@@ -54,7 +54,7 @@ export default class DistibutionChart extends Vue {
 
   public chart() {
     // TODO: this is a workaround until I can figure out why the SVG is not responsive
-    const width = this.distributionWidth > 60 ? this.distributionWidth - 60 : 200;
+    const width = this.distributionWidth > 60 ? this.distributionWidth - 60 : 250;
     const aspectRatio = 3 / 5;
     const series = this.$props.velocity
       ? [this.aggregateSeries, this.velocitySeries]

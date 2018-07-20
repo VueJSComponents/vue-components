@@ -5,6 +5,7 @@ import { ISearchCriteria, searchCriteria } from '@/store/searchCriteria';
 import { IPackages, packages } from '@/store/packages';
 import { ISnackbar, snackbar } from '@/store/snackbar';
 import { IUsers, users } from '@/store/users';
+import { readme, IReadme } from '@/store/readme';
 import { ITransientState, transient } from '@/store/transient';
 import VuexPersistence from 'vuex-persist';
 
@@ -13,7 +14,10 @@ const localStorage = new VuexPersistence<IRootState, Payload>({
   reducer: state => ({
     packages: state.packages,
     users: state.users,
-    searchCriteria: state.searchCriteria
+    searchCriteria: state.searchCriteria,
+    transient: {
+      componentTab: state.transient.componentTab
+    }
   })
 });
 
@@ -25,6 +29,8 @@ export interface IRootState {
   searchCriteria: ISearchCriteria;
   snackbar: ISnackbar;
   route: any;
+  transient: ITransientState;
+  readme: IReadme;
 }
 
 export default new Vuex.Store<IRootState>({
@@ -33,7 +39,8 @@ export default new Vuex.Store<IRootState>({
     users,
     searchCriteria,
     snackbar,
-    transient
+    transient,
+    readme
   },
   plugins: [FireModelPlugin, localStorage.plugin]
 });

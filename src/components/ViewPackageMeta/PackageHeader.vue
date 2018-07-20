@@ -20,9 +20,9 @@
           <v-tooltip right>
             <span slot="activator" class="npm-score">{{selected.score.final}}</span>
             <span>
-              quality: {{selected.score.detail.quality}},<br/>
-              popularity: {{selected.score.detail.popularity}},<br/>
-              maintenance: {{selected.score.detail.maintenance}}
+              quality: {{selected.score.details.quality}},<br/>
+              popularity: {{selected.score.details.popularity}},<br/>
+              maintenance: {{selected.score.details.maintenance}}
             </span>
           </v-tooltip>
         </span>

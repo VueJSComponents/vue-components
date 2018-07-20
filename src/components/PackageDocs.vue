@@ -10,8 +10,8 @@
     &nbsp;
     {{packageName}}
   </v-card-title>
-  <v-card-text>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis at ab recusandae fugiat, saepe molestiae doloribus assumenda rem voluptates non illum nemo dolorem architecto animi obcaecati esse eius et iure
+  <v-card-text class="doc-frame">
+      <iframe src="http://miaolz123.github.io/vue-markdown/" frameborder="0"></iframe>
   </v-card-text>
 </v-card>
 </template>
@@ -33,5 +33,10 @@ export default class PackageDocs extends Vue {
   border-top: 1px solid lightgrey;
   border-bottom: 1px solid darkgrey;
   background-color: whitesmoke;
+}
+
+.doc-frame iframe {
+  width: 930px;
+  height: 900px;
 }
 </style>

@@ -8,7 +8,7 @@
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat>FAQ</v-btn>
+        <router-link tag="v-btn" flat :to="{ name: 'about' }">About</router-link>
       </v-toolbar-items>
     </v-toolbar>
 </template>

@@ -47,7 +47,7 @@ export default class App extends Vue {
 
   @Packages.State public since: number;
 
-  public async mounted() {
+  public async created() {
     const config = {
       apiKey: 'AIzaSyCSgGc5m2SdkowLAHk2A2iV0IymNoTWB4Y',
       authDomain: 'vue-components.firebaseapp.com',
@@ -57,8 +57,6 @@ export default class App extends Vue {
       messagingSenderId: '342051144863'
     };
     const db = await DB.connect(config);
-    console.log(db);
-    await wait(350);
     FireModel.defaultDb = db;
     FireModel.dispatch = VeuxWrapper(this.$store.dispatch);
     // Packages

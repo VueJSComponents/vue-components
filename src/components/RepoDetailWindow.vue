@@ -1,38 +1,28 @@
 <template>
-  <v-flex xs12 sm12 md7 lg10 xl10 my-0 px-0 fill-height>
+  <v-flex xs12 sm12 md7 lg10 xl10 my-0 px-0 fill-height class="repo-detail-window">
       <div class="selected-repo" v-if="selectedRepo">
         <v-tabs
-          v-model="active"
+          :value="tab"
+          @input="changeTab"
           color="blue"
           dark
           fixed-tabs
           slider-color="blue darken-4"
         >
           <v-spacer></v-spacer>
-          <v-tab key="meta" ripple>
-              META
-          </v-tab>
-          <v-tab key="readme" ripple>
-              README
-          </v-tab>
-          <v-tab key="docs" ripple>
-              Docs
-          </v-tab>
-          <v-tab key="play" ripple>
-              Playground
-          </v-tab>
+          <router-link
+            tag="v-tab" 
+            :to="{ name: 'package' + item }"
+            :id="'tab-' + item" 
+            :key="item" ripple 
+            v-for="item in tabs"
+          >
+            {{item.toUpperCase()}}
+          </router-link>
 
-          <v-tab-item key="meta"> 
-            <ViewPackageMeta :selected="selected" :packageName="packageName"/>
-          </v-tab-item>
-          <v-tab-item key="readme">
-            <package-readme :selected="selected" :packageName="packageName" />
-          </v-tab-item>
-          <v-tab-item key="docs">
-              <package-docs :selected="selected" :packageName="packageName" />
-          </v-tab-item>
-          <v-tab-item key="play">
-              <package-playground :selected="selected" :packageName="packageName" />
+          <v-tab-item v-for="item in tabs" :id="'tab-item-' + item" :key="item">
+            item: {{item}}
+            <router-view :selectedPackage="selectedPackage"></router-view>
           </v-tab-item>
 
           <v-spacer></v-spacer>
@@ -56,14 +46,17 @@
 </template>
 
 <script lang='ts'>
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { State, Getter, Mutation, Action, namespace } from 'vuex-class';
 import ViewPackageMeta from './ViewPackageMeta.vue';
 import PackageReadme from './PackageReadme.vue';
 import PackageDocs from './PackageDocs.vue';
-const Packages = namespace('packages');
 import PackagePlayground from './PackagePlayground.vue';
 import { Package } from '@/models/Package';
+import { ComponentTab } from '@/store/transient';
+import { Route } from 'vue-router';
+const Packages = namespace('packages');
+const Transient = namespace('transient');
 
 @Component({
   components: {
@@ -76,7 +69,16 @@ import { Package } from '@/models/Package';
 export default class RepoDetailWindow extends Vue {
   @Prop() public selectedRepo!: string;
   @Packages.Getter('selectedPackage') public selectedPackage: Package;
-  public active: string = 'meta';
+  @Transient.State('componentTab') public tab: string;
+  private tabs = ['Meta', 'Readme', 'Docs', 'Playground'];
+
+  public get active(): string {
+    return this.tab;
+  }
+
+  public changeTab(index: number) {
+    this.$router.push({ name: `package${this.tabs[index]}` });
+  }
 
   public get selected(): Package {
     const pkg: Partial<Package> = this.selectedPackage || {
@@ -100,10 +102,6 @@ export default class RepoDetailWindow extends Vue {
     };
 
     return pkg as Package;
-  }
-
-  public get packageName() {
-    return this.selected ? this.selected.id.replace('!!!', '/').replace('%2E', '.') : '';
   }
 }
 </script>

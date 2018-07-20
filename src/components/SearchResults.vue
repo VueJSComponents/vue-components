@@ -2,13 +2,13 @@
   <v-layout row>
     <v-flex xs12>
         <v-list>
-          <v-list-tile 
+          <v-list-tile
+            @click="selectItem(item)"
             v-for="item in filteredResults" 
             :key="item.id" 
             avatar 
-            @click="selectItem(item)" 
             ripple
-            :class="item.id === $route.params.id ? 'active' : 'inactive'"
+            :class="item.id === active ? 'active' : 'inactive'"
           >
             <v-list-tile-avatar >
               <v-avatar
@@ -68,12 +68,20 @@ export default class SearchResults extends Vue {
   @Prop() public selectedRepo!: string;
   @Packages.Getter public filteredPackages!: Package[];
   @Transient.State public componentTab: ComponentTab;
+  // public active: string = '';
+  public get active() {
+    return this.$route.params.id;
+  }
 
   public selectItem(item: Package) {
+    console.log('select item: ', item);
+
     if (this.$route.params.id === item.id) {
-      this.$router.push({ path: `/component` });
+      this.$router.push({ name: 'packageUnselected' });
+      // this.active = '';
     } else {
-      this.$router.push({ path: `/component/${item.id}/${this.componentTab}` });
+      // this.active = item.id;
+      this.$router.push(`/package/${item.id}/${this.componentTab}`);
     }
   }
 

@@ -6,6 +6,7 @@
         :headers="contributorHeaders"
         :items="contributorArray"
         hide-actions
+        class="contributors-table"
       >
         <template slot="items" slot-scope="props" >
           <tr @click.stop="SHOW_USER_PROFILE(props.item.id)">
@@ -17,11 +18,10 @@
               <v-gravatar v-else :email="lookupUser(props.item.id).email" default-img="mm" />
             </v-avatar>
           </td>
-          <td class="text-xs-left" >
-            &nbsp;&nbsp;
+          <td class="contributor-id text-xs-left" >
             {{ props.item.username }}
           </td>
-          <td class="text-xs-right">{{ props.item.commitsCount }}</td>
+          <td class="contributor-commits text-xs-right">{{ props.item.commitsCount }}</td>
 
           </tr>
         </template>
@@ -48,13 +48,21 @@ export default class PackageContributors extends Vue {
   @Users.Mutation public HIDE_USER_PROFILE: () => void;
 
   public get contributorArray() {
-    return hashToArray(this.contributors).sort((a, b) => (a.commitsCount > b.commitsCount ? 0 : 1));
+    return hashToArray(this.contributors).sort(
+      (a, b) => (a.commitsCount > b.commitsCount ? -1 : 1)
+    );
   }
 
   public contributorHeaders = [
-    { text: '', value: 'avatar', align: 'left', sortable: false, width: '28px' },
-    { text: 'Name', value: 'name', align: 'left', sortable: false },
-    { text: 'Commits', value: 'commits', align: 'right', sortable: false }
+    { text: '', value: 'avatar', align: 'left', sortable: false, width: '32px' },
+    {
+      text: 'Name',
+      value: 'name',
+      align: 'left',
+      sortable: false,
+      class: 'user-name'
+    },
+    { text: 'Commits', value: 'commits', align: 'right', width: '30px', sortable: false }
   ];
 }
 </script>
@@ -64,5 +72,25 @@ export default class PackageContributors extends Vue {
 .v-card.contributors {
   max-width: 30%;
   cursor: pointer;
+}
+.contributors-table {
+  overflow-x: hidden;
+}
+
+/* table.table td:first-child,
+table.table thead th:first-child {
+  padding: 0 12px !important;
+}
+
+table.table td:last-child,
+table.table thead th:not(:first-child) {
+  padding: 0 12px !important;
+} */
+
+td.contributor-avatar,
+td.contributor-commits,
+td.contributor-id,
+table.v-table thead th.user-name {
+  padding: 0 6px !important;
 }
 </style>

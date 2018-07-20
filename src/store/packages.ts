@@ -3,6 +3,7 @@ import { Package } from '@/models/Package';
 import { GetterTree, MutationTree, Module } from 'vuex';
 import store, { IRootState } from '@/store';
 import { namespace } from 'vuex-class';
+import { get } from 'lodash';
 
 export interface IPackages {
   all: Package[];
@@ -27,7 +28,7 @@ const state: IPackages = {
 const getters: GetterTree<IPackages, IRootState> = {
   // tslint:disable:no-shadowed-variable
   selected(state, _, rootState): string {
-    return rootState.route.path.indexOf('component') !== -1 ? rootState.route.params.id : '';
+    return rootState.route.path.indexOf('package') !== -1 ? rootState.route.params.id : '';
   },
   filteredPackages(state): Package[] {
     const selectOn = store.state.searchCriteria;
@@ -38,7 +39,7 @@ const getters: GetterTree<IPackages, IRootState> = {
       : all;
     filtered =
       selectOn.rating !== undefined
-        ? filtered.filter(i => i.score.final >= selectOn.rating)
+        ? filtered.filter(i => get(i, 'score.final', 0) >= selectOn.rating)
         : filtered;
     filtered = selectOn.stars ? filtered.filter(i => i.starsCount >= selectOn.stars) : filtered;
 
@@ -49,9 +50,9 @@ const getters: GetterTree<IPackages, IRootState> = {
 
     return filtered;
   },
-  selectedPackage(state) {
-    const pkgs = store.getters['packages/filteredPackages'];
-    const selected = store.getters['packages/selected'];
+  selectedPackage(state, getters) {
+    const pkgs = getters.filteredPackages;
+    const selected = getters.selected;
 
     const pkg = pkgs.filter((i: Package) => i.id === selected);
     return pkg[0];

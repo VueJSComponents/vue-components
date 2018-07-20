@@ -118,6 +118,14 @@ const SnackBar = namespace('snackbar');
     PackageSubHeader,
     PackageContributors
   }
+  // beforeRouteEnter(to: any, from: any, next: any) {
+  //   console.log(to, from);
+  //   next();
+  // },
+  // beforeRouteLeave(to: any, from: any, next: any) {
+  //   console.log('leaving');
+  //   next();
+  // }
 })
 export default class ViewPackageMeta extends Vue {
   @Prop() public packageName!: string;
@@ -132,30 +140,6 @@ export default class ViewPackageMeta extends Vue {
   @Users.Mutation public SHOW_USER_PROFILE: (id: fk) => void;
   @Users.Mutation public HIDE_USER_PROFILE: () => void;
   @Users.State public show: fk;
-
-  // public get selected(): Package {
-  //   const pkg: Partial<Package> = this.selectedPackage || {
-  //     author: {
-  //       id: '',
-  //       name: '',
-  //       email: '',
-  //       avatar_url: '',
-  //       user_url: '',
-  //       company: '',
-  //       blog: '',
-  //       bio: '',
-  //       location: '',
-  //       isVueUser: '',
-  //       favorites: []
-  //     },
-  //     score: {
-  //       detail: { popularity: 0, quality: 0, maintenance: 0 },
-  //       final: 0
-  //     }
-  //   };
-
-  //   return pkg as Package;
-  // }
 
   public get createdAt() {
     return format(this.selectedPackage.createdAt, 'D MMM YYYY');
