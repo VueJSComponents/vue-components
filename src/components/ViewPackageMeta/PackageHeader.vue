@@ -3,7 +3,7 @@
   <v-layout fill-height>
     <v-flex xs9 align-start flexbox column>
       <span class="headline flexbox">
-        {{ packageName }}
+        {{ selected.name }}
         <br>
       </span>
       <span class="normal author">{{ selected.author.name }}</span>
@@ -20,9 +20,9 @@
           <v-tooltip right>
             <span slot="activator" class="npm-score">{{selected.score.final}}</span>
             <span>
-              quality: {{selected.score.details.quality}},<br/>
-              popularity: {{selected.score.details.popularity}},<br/>
-              maintenance: {{selected.score.details.maintenance}}
+              quality: {{selected.score.detail.quality}},<br/>
+              popularity: {{selected.score.detail.popularity}},<br/>
+              maintenance: {{selected.score.detail.maintenance}}
             </span>
           </v-tooltip>
         </span>
@@ -42,10 +42,6 @@ const Packages = namespace('packages');
 @Component
 export default class PackageHeader extends Vue {
   @Prop() public selected: Package;
-
-  public get packageName() {
-    return this.selected.id.replace('!!!', '/').replace('%2E', '.');
-  }
 }
 </script>
 

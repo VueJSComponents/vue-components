@@ -1,12 +1,12 @@
 <template>
-<v-card>
+<v-card class="details-content">
   <v-card-media src="/img/PlaygroundHeader.jpg" class="black--text" height="230px">
 
   </v-card-media>
   <v-card-title class="title flexbox center">
     <i class="light">for the package </i>
     &nbsp;
-    <strong>{{packageName}}</strong>
+    <strong>{{selected.name}}</strong>
   </v-card-title>
   <v-card-text>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis at ab recusandae fugiat, saepe molestiae doloribus assumenda rem voluptates non illum nemo dolorem architecto animi obcaecati esse eius et iure

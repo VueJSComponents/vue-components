@@ -10,7 +10,9 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "@types/animejs": "^2.0.0",
     "abstracted-client": "^0.14.4",
+    "animejs": "^2.2.0",
     "chartist": "^0.11.0",
     "date-fns": "^1.29.0",
     "firemodel": "^0.15.15",
@@ -28,6 +30,7 @@
     "vuex-persist": "^1.4.3",
     "vuex-router-sync": "^5.0.0"
   },
+  "main": "src/main.ts",
   "devDependencies": {
     "@types/chai": "^4.1.0",
     "@types/chance": "^1.0.1",

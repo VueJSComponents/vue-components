@@ -14,10 +14,7 @@ const localStorage = new VuexPersistence<IRootState, Payload>({
   reducer: state => ({
     packages: state.packages,
     users: state.users,
-    searchCriteria: state.searchCriteria,
-    transient: {
-      componentTab: state.transient.componentTab
-    }
+    searchCriteria: state.searchCriteria
   })
 });
 

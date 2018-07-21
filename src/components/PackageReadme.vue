@@ -1,15 +1,13 @@
 <template>
-<v-card class="package-readme g-flex">
+<v-card class="package-readme flexbox details-content">
   <v-card-media src="/img/ReadmeHeader.jpg" class="black--text" height="230px">
-
   </v-card-media>
   <v-card-title class="title flexbox center">
     <i class="light">for the package </i>
     &nbsp;
-    <strong>{{packageName}}</strong>
+    <strong>{{selected.name}}</strong>
   </v-card-title>
   <v-card-text>
-
     {{readme.html}}
   </v-card-text>
 </v-card>

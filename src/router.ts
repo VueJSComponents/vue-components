@@ -15,29 +15,30 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '',
-      name: 'unselected',
-      component: PackageUnselected,
-      children: [
-        { path: '/package', name: 'packageUnselected', redirect: '/' },
-        { path: '/package/:id/meta', name: 'packageMeta', component: ViewPackageMeta },
-        { path: '/package/:id/readme', name: 'packageReadme', component: PackageReadme },
-        { path: '/package/:id/docs', name: 'packageDocs', component: PackageDocs },
-        {
-          path: '/package/:id/playground',
-          name: 'packagePlayground',
-          component: PackagePlayground
-        }
-      ]
+      path: '/',
+      name: 'notselected',
+      component: PackageUnselected
     },
     {
-      path: '/welcome',
-      component: ContentWindow
+      path: '/package/:id/meta',
+      name: 'packageMeta',
+      component: ViewPackageMeta
+    },
+    { path: '/package/:id/readme', name: 'packageReadme', component: PackageReadme },
+    { path: '/package/:id/docs', name: 'packageDocs', component: PackageDocs },
+    {
+      path: '/package/:id/playground',
+      name: 'packagePlayground',
+      component: PackagePlayground
     },
     {
       path: '/about',
       name: 'about',
       component: About
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 });

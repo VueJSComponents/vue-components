@@ -1,5 +1,5 @@
 <template>
-<v-card>
+<v-card class="details-content">
   <v-card-media src="/img/DocsHeader.jpg" class="black--text" height="230px">
 
   </v-card-media>
@@ -8,7 +8,7 @@
       for the package 
     </i>
     &nbsp;
-    {{packageName}}
+    {{selected.name}}
   </v-card-title>
   <v-card-text class="doc-frame">
       <iframe src="http://miaolz123.github.io/vue-markdown/" frameborder="0"></iframe>

@@ -8,7 +8,7 @@
       app
     >
       <v-toolbar flat class="transparent hidden-sm-and-down">
-        <v-list class="pa-0">
+        <v-list class="">
           <v-list-tile avatar >
             <v-list-tile-avatar>
               <v-icon large>info</v-icon>

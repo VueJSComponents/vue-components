@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <NavDrawer :drawer="drawer"/>
-    <TopToolbar :title="title" @toggleDrawer="drawer = !drawer"/>
+    <!-- <NavDrawer :drawer="drawer"/> -->
+    <TopToolbar :title="title" />
     <v-content>
       <ContentWindow :selectedRepo="selectedRepo" @changeRepo="selectedRepo = $event"/>
     </v-content>
@@ -105,6 +105,11 @@ export default class App extends Vue {
   display: flex;
 }
 
+.flexbox.fill {
+  flex: 1;
+  width: 100%;
+}
+
 .space-around {
   justify-content: space-around;
 }
@@ -155,6 +160,11 @@ export default class App extends Vue {
   flex-direction: column;
 }
 
+.details-content {
+  min-height: 80vh;
+  width: 960px;
+}
+
 .horizontal-cards > .card {
   margin: 0 5px;
 }
@@ -173,6 +183,96 @@ export default class App extends Vue {
   font-size: 85%;
   background-color: rgba(27, 31, 35, 0.05);
   border-radius: 3px;
+}
+
+// ANIMATION
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animated.infinite {
+  animation-iteration-count: infinite;
+}
+
+.animated.delay-1s {
+  animation-delay: 1s;
+}
+
+.animated.delay-2s {
+  animation-delay: 2s;
+}
+
+.animated.delay-3s {
+  animation-delay: 3s;
+}
+
+.animated.delay-4s {
+  animation-delay: 4s;
+}
+
+.animated.delay-5s {
+  animation-delay: 5s;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInLeft {
+  animation-name: slideInLeft;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInRight {
+  animation-name: slideInRight;
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.slideOutLeft {
+  animation-name: slideOutLeft;
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+.slideOutRight {
+  animation-name: slideOutRight;
 }
 </style>
  

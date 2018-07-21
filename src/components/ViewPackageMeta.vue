@@ -1,23 +1,23 @@
 <template>
 <div class="package-meta" v-if="selectedPackage">
-  <v-flex class="d-flex space-around">
+  <v-flex class="d-flex space-around details-content">
       <v-card class="d-flex ">
         <v-card-media
           class="white--text"
           height="230px"
           src="/img/github.jpg"
         >
-          <package-header :selected="selected" />
+          <package-header :selected="selectedPackage" />
         </v-card-media>
 
-        <package-sub-header :selected="selected" />
+        <package-sub-header :selected="selectedPackage" />
 
         <v-card-title>
           <h3>Overview</h3> 
         </v-card-title>
         <v-card-text>
             <p>
-              The <i>{{ cleanedRepoName }}</i>&nbsp; repository has been in existence since <b>{{createdAt}}</b> with the latest commit on <b>{{lastUpdated}}</b>. It describes itself as: 
+              The <i>{{ selectedPackage.name }}</i>&nbsp; repository has been in existence since <b>{{createdAt}}</b> with the latest commit on <b>{{lastUpdated}}</b>. It describes itself as: 
             </p>
             <p class="px-3 text-xs-center">
               <v-icon>format_quote</v-icon>
@@ -118,18 +118,8 @@ const SnackBar = namespace('snackbar');
     PackageSubHeader,
     PackageContributors
   }
-  // beforeRouteEnter(to: any, from: any, next: any) {
-  //   console.log(to, from);
-  //   next();
-  // },
-  // beforeRouteLeave(to: any, from: any, next: any) {
-  //   console.log('leaving');
-  //   next();
-  // }
 })
 export default class ViewPackageMeta extends Vue {
-  @Prop() public packageName!: string;
-  @Prop() public selected!: Package;
   @Packages.Getter public filteredPackages!: Package[];
   @Packages.Getter public selectedPackage!: Package;
   public avatarSize = '25px';
@@ -160,10 +150,6 @@ export default class ViewPackageMeta extends Vue {
     const closed = total - open;
 
     return { open, closed, total };
-  }
-
-  public get cleanedRepoName() {
-    return this.selected.id.replace('!!!', '/').replace('%2E', '.');
   }
 
   public get dependencies(): Array<IDictionary<{ dependency: string; version: string }>> {

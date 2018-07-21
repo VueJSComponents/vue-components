@@ -1,8 +1,8 @@
 <template>
-  <v-flex xs12 sm12 md7 lg10 xl10 my-0 px-0 fill-height class="repo-detail-window">
-      <div class="selected-repo" v-if="selectedRepo">
+  <v-flex fill-height class="repo-detail-window">
+      <div class="selected-repo " v-if="selectedRepo">
         <v-tabs
-          :value="tab"
+          :value="active"
           @input="changeTab"
           color="blue"
           dark
@@ -14,19 +14,27 @@
             tag="v-tab" 
             :to="{ name: 'package' + item }"
             :id="'tab-' + item" 
+            :active="item === active"
             :key="item" ripple 
-            v-for="item in tabs"
+            v-for="(item) in tabs"
+            active-class="active"
           >
             {{item.toUpperCase()}}
           </router-link>
 
-          <v-tab-item v-for="item in tabs" :id="'tab-item-' + item" :key="item">
-            item: {{item}}
-            <router-view :selectedPackage="selectedPackage"></router-view>
-          </v-tab-item>
-
           <v-spacer></v-spacer>
         </v-tabs>
+        <div class="flexbox row center">
+          <transition mode="out-in"
+            enter-active-class="animated slideInLeft"
+            leave-active-class="animated slideOutRight"
+          >
+          <!-- <slide-left> -->
+            <router-view :selected="selected"></router-view>
+          <!-- </slide-left> -->
+          </transition>
+
+        </div>
 
       </div>
       <div v-else>
@@ -39,7 +47,7 @@
           >
         </v-tabs>
         <v-layout class="not-selected px-1 py-1 " fill-height>
-          <span>no repo selected</span>
+          <router-view></router-view>
         </v-layout>
       </div>
     </v-flex>
@@ -53,8 +61,8 @@ import PackageReadme from './PackageReadme.vue';
 import PackageDocs from './PackageDocs.vue';
 import PackagePlayground from './PackagePlayground.vue';
 import { Package } from '@/models/Package';
-import { ComponentTab } from '@/store/transient';
 import { Route } from 'vue-router';
+import SlideLeft from '../Transitions/SlideLeft.vue';
 const Packages = namespace('packages');
 const Transient = namespace('transient');
 
@@ -63,17 +71,17 @@ const Transient = namespace('transient');
     ViewPackageMeta,
     PackageReadme,
     PackageDocs,
-    PackagePlayground
+    PackagePlayground,
+    SlideLeft
   }
 })
 export default class RepoDetailWindow extends Vue {
   @Prop() public selectedRepo!: string;
   @Packages.Getter('selectedPackage') public selectedPackage: Package;
-  @Transient.State('componentTab') public tab: string;
   private tabs = ['Meta', 'Readme', 'Docs', 'Playground'];
 
-  public get active(): string {
-    return this.tab;
+  public get active(): number {
+    return this.tabs.findIndex(i => i === this.$route.name.replace('package', ''));
   }
 
   public changeTab(index: number) {
@@ -81,7 +89,7 @@ export default class RepoDetailWindow extends Vue {
   }
 
   public get selected(): Package {
-    const pkg: Partial<Package> = this.selectedPackage || {
+    const defaults: Partial<Package> = {
       author: {
         id: '',
         name: '',
@@ -100,6 +108,7 @@ export default class RepoDetailWindow extends Vue {
         final: 0
       }
     };
+    const pkg: Partial<Package> = { ...defaults, ...(this.selectedPackage || {}) };
 
     return pkg as Package;
   }
